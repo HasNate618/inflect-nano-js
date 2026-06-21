@@ -1,0 +1,48 @@
+{
+  "name": "inflect-nano-js",
+  "version": "0.1.0",
+  "description": "Ultra-lightweight browser TTS for Inflect-Nano-v1 (~4.6M params) via ONNX Runtime Web",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "tts",
+    "text-to-speech",
+    "inflect-nano",
+    "onnx",
+    "browser",
+    "wasm",
+    "speech-synthesis"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nate/inflect-nano-js"
+  },
+  "dependencies": {
+    "onnxruntime-web": "^1.27.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.2"
+  },
+  "sideEffects": false
+}
