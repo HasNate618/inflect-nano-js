@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>inflect-nano-js demo</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: system-ui, sans-serif;
+        line-height: 1.5;
+      }
+      body {
+        max-width: 42rem;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+      textarea {
+        width: 100%;
+        min-height: 6rem;
+        font: inherit;
+      }
+      .row {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin: 0.75rem 0;
+      }
+      button {
+        font: inherit;
+        padding: 0.5rem 1rem;
+      }
+      #status {
+        min-height: 1.5rem;
+        opacity: 0.85;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>inflect-nano-js</h1>
+    <p>Browser demo for Inflect-Nano-v1 (~4.6M params, 24 kHz).</p>
+
+    <textarea id="text">
+Wait, are you actually being for real now? This is a tiny on-device text to speech model.
+    </textarea>
+
+    <div class="row">
+      <button id="load">Load model</button>
+      <button id="speak" disabled>Speak</button>
+      <button id="download" disabled>Download WAV</button>
+    </div>
+
+    <p id="status">Click "Load model" to download weights (~36 MB first time).</p>
+
+    <script type="module">
+      import { InflectNanoTTS } from "../../dist/index.js";
+
+      const statusEl = document.getElementById("status");
+      const textEl = document.getElementById("text");
+      const loadBtn = document.getElementById("load");
+      const speakBtn = document.getElementById("speak");
+      const downloadBtn = document.getElementById("download");
+
+      let tts;
+      let lastAudio;
+
+      function setStatus(message) {
+        statusEl.textContent = message;
+      }
+
+      loadBtn.addEventListener("click", async () => {
+        loadBtn.disabled = true;
+        setStatus("Loading models and text frontend...");
+        try {
+          tts = await InflectNanoTTS.from_pretrained(undefined, {
+            progressCallback: ({ file, loaded, total }) => {
+              const name = file.split("/").pop();
+              const pct = total ? `${Math.round((loaded / total) * 100)}%` : `${Math.round(loaded / 1024)} KB`;
+              setStatus(`Downloading ${name}: ${pct}`);
+            },
+          });
+          speakBtn.disabled = false;
+          downloadBtn.disabled = false;
+          setStatus("Ready. Enter text and click Speak.");
+        } catch (error) {
+          console.error(error);
+          setStatus(`Load failed: ${error.message}`);
+          loadBtn.disabled = false;
+        }
+      });
+
+      speakBtn.addEventListener("click", async () => {
+        speakBtn.disabled = true;
+        setStatus("Synthesizing...");
+        try {
+          lastAudio = await tts.generate(textEl.value.trim());
+          setStatus(`Playing ${lastAudio.duration.toFixed(2)}s of audio...`);
+          await lastAudio.play();
+          setStatus("Done.");
+        } catch (error) {
+          console.error(error);
+          setStatus(`Synthesis failed: ${error.message}`);
+        } finally {
+          speakBtn.disabled = false;
+        }
+      });
+
+      downloadBtn.addEventListener("click", async () => {
+        if (!lastAudio) {
+          lastAudio = await tts.generate(textEl.value.trim());
+        }
+        await lastAudio.save("inflect-nano.wav");
+        setStatus("Download started.");
+      });
+    </script>
+  </body>
+</html>
