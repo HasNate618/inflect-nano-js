@@ -44,7 +44,7 @@ export interface DecoderFeeds {
   frames: Float32Array;
   frame_meta: Float32Array;
   local_ctx_raw: Float32Array;
-  abs_pos: BigInt64Array;
+  abs_pos: Int32Array;
   pitch_frame: Float32Array;
   frame_mask: Uint8Array;
   frameCount: number;

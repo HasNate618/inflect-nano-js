@@ -23,20 +23,29 @@ export class RawAudio {
     URL.revokeObjectURL(url);
   }
 
-  async play(): Promise<void> {
+  async play(element?: HTMLAudioElement): Promise<void> {
     const blob = this.toBlob();
     const url = URL.createObjectURL(blob);
-    const audio = new Audio(url);
+    const audio = element ?? new Audio(url);
+
+    if (element) {
+      element.src = url;
+      element.currentTime = 0;
+    }
+
     await new Promise<void>((resolve, reject) => {
-      audio.onended = () => {
-        URL.revokeObjectURL(url);
+      const cleanup = () => URL.revokeObjectURL(url);
+      const target = element ?? audio;
+
+      target.onended = () => {
+        cleanup();
         resolve();
       };
-      audio.onerror = () => {
-        URL.revokeObjectURL(url);
+      target.onerror = () => {
+        cleanup();
         reject(new Error("Audio playback failed"));
       };
-      void audio.play();
+      void target.play().catch(reject);
     });
   }
 }

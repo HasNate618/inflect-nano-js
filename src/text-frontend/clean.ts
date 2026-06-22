@@ -11,13 +11,24 @@ const QUOTE_TRANSLATION: Record<string, string> = {
 };
 
 export function cleanTinyTtsText(text: string): string {
-  let out = "";
-  for (const char of text) {
-    out += QUOTE_TRANSLATION[char] ?? char;
+  let result = text;
+
+  for (const [from, to] of Object.entries(QUOTE_TRANSLATION)) {
+    result = result.split(from).join(to);
   }
-  out = out.replaceAll("...", "…");
-  out = out.replace(/\s+/g, " ").trim();
-  out = out.replace(/\s+([,.!?…])/g, "$1");
-  out = out.replace(/([,.!?…]){2,}/g, "$1");
-  return out;
+
+  result = result.replace(/\.\.\./g, "\u2026");
+
+  // Strip markdown
+  result = result.replace(/\*\*(.+?)\*\*/g, "$1");
+  result = result.replace(/\*(.+?)\*/g, "$1");
+  result = result.replace(/`(.+?)`/g, "$1");
+  result = result.replace(/^#{1,6}\s+/gm, "");
+  result = result.replace(/^[-*•]\s+/gm, "");
+  result = result.replace(/^\d+\.\s+/gm, "");
+
+  result = result.replace(/\s+/g, " ").trim();
+  result = result.replace(/\s+([,.!?\u2026])/g, "$1");
+  result = result.replace(/([,.!?\u2026]){2,}/g, "$1");
+  return result;
 }

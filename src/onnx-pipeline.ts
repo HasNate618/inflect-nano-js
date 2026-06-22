@@ -19,6 +19,13 @@ function int64Tensor(data: ArrayLike<number>, dims: number[]): ort.Tensor {
   return new ort.Tensor("int64", values, dims);
 }
 
+function toFloat32(data: ort.Tensor["data"]): Float32Array {
+  if (data instanceof Float32Array) return data;
+  const out = new Float32Array(data.length);
+  for (let i = 0; i < data.length; i++) out[i] = Number(data[i]);
+  return out;
+}
+
 function normalizeAudio(audio: Float32Array, targetRmsDb = -20, peakDb = -1): Float32Array {
   if (!audio.length) return new Float32Array([0]);
 
@@ -101,9 +108,9 @@ export class OnnxPipeline {
       speaker,
     });
 
-    const conditioned = encoderOut.conditioned?.data as Float32Array;
-    const durations = encoderOut.durations?.data as Float32Array;
-    const pitch = encoderOut.pitch?.data as Float32Array;
+    const conditioned = toFloat32(encoderOut.conditioned?.data as Float32Array);
+    const durations = toFloat32(encoderOut.durations?.data as Float32Array);
+    const pitch = toFloat32(encoderOut.pitch?.data as Float32Array);
     if (!conditioned || !durations || !pitch) {
       throw new Error("Unexpected acoustic encoder outputs");
     }
@@ -114,13 +121,13 @@ export class OnnxPipeline {
     const hiddenSize = conditioned.length / seqLen;
     const feeds = hostRegulate(conditioned, intDurations, pitch, seqLen, hiddenSize);
     const decoderOut = await this.decoder.run(decoderFeedsToOrt(feeds));
-    const mel = decoderOut.mel?.data as Float32Array;
+    const mel = toFloat32(decoderOut.mel?.data as Float32Array);
     if (!mel) throw new Error("Unexpected acoustic decoder output");
 
     const vocoderOut = await this.vocoder.run({
       mel: new ort.Tensor("float32", mel, [1, 80, feeds.frameCount]),
     });
-    const wav = vocoderOut.wav?.data as Float32Array;
+    const wav = toFloat32(vocoderOut.wav?.data as Float32Array);
     if (!wav) throw new Error("Unexpected vocoder output");
 
     return normalizeAudio(wav);
@@ -140,11 +147,13 @@ export class OnnxPipeline {
 
 function decoderFeedsToOrt(feeds: DecoderFeeds): Record<string, ort.Tensor> {
   const F = feeds.frameCount;
+  const absPos64 = new BigInt64Array(F);
+  for (let i = 0; i < F; i++) absPos64[i] = BigInt(feeds.abs_pos[i]);
   return {
     frames: new ort.Tensor("float32", feeds.frames, [1, F, feeds.frames.length / F]),
     frame_meta: new ort.Tensor("float32", feeds.frame_meta, [1, F, 8]),
     local_ctx_raw: new ort.Tensor("float32", feeds.local_ctx_raw, [1, F, feeds.local_ctx_raw.length / F]),
-    abs_pos: new ort.Tensor("int64", feeds.abs_pos, [1, F]),
+    abs_pos: new ort.Tensor("int64", absPos64, [1, F]),
     pitch_frame: new ort.Tensor("float32", feeds.pitch_frame, [1, F, 2]),
     frame_mask: new ort.Tensor("bool", feeds.frame_mask, [1, F]),
   };

@@ -35,7 +35,7 @@ export function hostRegulate(
   const F = frameCount;
   const frameMeta = new Float32Array(F * 8);
   const localCtxRaw = new Float32Array(F * hiddenSize * 3);
-  const absPos = new BigInt64Array(F);
+  const absPos = new Int32Array(F);
   const pitchFrame = new Float32Array(F * 2);
   const frameMask = new Uint8Array(F);
 
@@ -70,7 +70,7 @@ export function hostRegulate(
       localCtxRaw[localBase + hiddenSize * 2 + h] = conditioned[nextOffset + h];
     }
 
-    absPos[f] = BigInt(Math.min(Math.floor((f * ABS_FRAME_BINS) / Math.max(1, MAX_FRAMES)), ABS_FRAME_BINS - 1));
+    absPos[f] = Math.min(Math.floor((f * ABS_FRAME_BINS) / Math.max(1, MAX_FRAMES)), ABS_FRAME_BINS - 1);
     pitchFrame[f * 2] = pitch[tok * 2];
     pitchFrame[f * 2 + 1] = pitch[tok * 2 + 1];
     frameMask[f] = 1;

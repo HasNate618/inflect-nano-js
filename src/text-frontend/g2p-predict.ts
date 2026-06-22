@@ -73,7 +73,7 @@ export async function loadG2pModel(url: string): Promise<void> {
     phonemes: raw.phonemes,
     g2idx,
     idx2p,
-    hiddenDim: raw.enc_w_hh_shape[1],
+    hiddenDim: raw.enc_w_hh_shape?.[1] ?? raw.enc_w_hh.shape[1],
   };
 }
 
