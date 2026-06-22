@@ -20,6 +20,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
+    "generate-symbols": "python3 scripts/generate-symbols.py",
     "prepublishOnly": "npm run build"
   },
   "keywords": [

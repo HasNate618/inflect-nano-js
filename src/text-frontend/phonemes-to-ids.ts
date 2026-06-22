@@ -1,6 +1,6 @@
-import { ARPA, symbolToId, symbols } from "./symbols.js";
+import { ARPA, languageToneStartMap, symbolToId, symbols } from "./symbols.js";
 
-const symbolSet = new Set(symbols);
+const symbolSet = new Set<string>(symbols);
 
 export function phonemesToIds(
   cleanedText: string[],
@@ -9,7 +9,7 @@ export function phonemesToIds(
 ): [number[], number[], number[]] {
   const unkId = symbolToId["UNK"];
   const phones = cleanedText.map((symbol) => symbolToId[symbol] ?? unkId);
-  const toneStart = language === "EN" ? 7 : 0;
+  const toneStart = languageToneStartMap[language];
   const toneIds = tones.map((tone) => tone + toneStart);
   const langId = 2;
   const langIds = new Array(phones.length).fill(langId);

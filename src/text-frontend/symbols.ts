@@ -1,102 +1,14 @@
-// Generated from tiny_tts/text/symbols.py — keep in sync with owensong/Inflect-Nano-v1.
+// AUTO-GENERATED from tiny_tts/text/symbols.py — do not edit manually
+export const symbols = ["_", "\"", "(", ")", "*", "/", ":", "AA", "E", "EE", "En", "N", "OO", "Q", "V", "[", "\\", "]", "^", "a", "a:", "aa", "ae", "ah", "ai", "an", "ang", "ao", "aw", "ay", "b", "by", "c", "ch", "d", "dh", "dy", "e", "e:", "eh", "ei", "en", "eng", "er", "ey", "f", "g", "gy", "h", "hh", "hy", "i", "i0", "i:", "ia", "ian", "iang", "iao", "ie", "ih", "in", "ing", "iong", "ir", "iu", "iy", "j", "jh", "k", "ky", "l", "m", "my", "n", "ng", "ny", "o", "o:", "ong", "ou", "ow", "oy", "p", "py", "q", "r", "ry", "s", "sh", "t", "th", "ts", "ty", "u", "u:", "ua", "uai", "uan", "uang", "uh", "ui", "un", "uo", "uw", "v", "van", "ve", "vn", "w", "x", "y", "z", "zh", "zy", "~", "æ", "ç", "ð", "ø", "ŋ", "œ", "ɐ", "ɑ", "ɒ", "ɔ", "ɕ", "ə", "ɛ", "ɜ", "ɡ", "ɣ", "ɥ", "ɦ", "ɪ", "ɫ", "ɬ", "ɭ", "ɯ", "ɲ", "ɵ", "ɸ", "ɹ", "ɾ", "ʁ", "ʃ", "ʊ", "ʌ", "ʎ", "ʏ", "ʑ", "ʒ", "ʝ", "ʲ", "ˈ", "ˌ", "ː", "̃", "̩", "β", "θ", "ᄀ", "ᄁ", "ᄂ", "ᄃ", "ᄄ", "ᄅ", "ᄆ", "ᄇ", "ᄈ", "ᄉ", "ᄊ", "ᄋ", "ᄌ", "ᄍ", "ᄎ", "ᄏ", "ᄐ", "ᄑ", "ᄒ", "ᅡ", "ᅢ", "ᅣ", "ᅤ", "ᅥ", "ᅦ", "ᅧ", "ᅨ", "ᅩ", "ᅪ", "ᅫ", "ᅬ", "ᅭ", "ᅮ", "ᅯ", "ᅰ", "ᅱ", "ᅲ", "ᅳ", "ᅴ", "ᅵ", "ᆨ", "ᆫ", "ᆮ", "ᆯ", "ᆷ", "ᆸ", "ᆼ", "ㄸ", "!", "?", "…", ",", ".", "'", "-", "¿", "¡", "SP", "UNK"] as const;
 
-const punctuation = ["!", "?", "…", ",", ".", "'", "-", "¿", "¡"];
-const puSymbols = [...punctuation, "SP", "UNK"];
-export const PAD = "_";
+export const symbolToId: Record<string, number> = Object.fromEntries(symbols.map((s, i) => [s, i]));
 
-const zhSymbols = [
-  "E", "En", "a", "ai", "an", "ang", "ao", "b", "c", "ch", "d", "e", "ei", "en", "eng", "er", "f", "g", "h", "i", "i0", "ia", "ian", "iang", "iao", "ie", "in", "ing", "iong", "ir", "iu", "j", "k", "l", "m", "n", "o", "ong", "ou", "p", "q", "r", "s", "sh", "t", "u", "ua", "uai", "uan", "uang", "ui", "un", "uo", "v", "van", "ve", "vn", "w", "x", "y", "z", "zh", "AA", "EE", "OO",
-];
-const numZhTones = 6;
+export const languageIdMap = {"ZH": 0, "JP": 1, "EN": 2, "ZH_MIX_EN": 3, "KR": 4, "ES": 5, "SP": 5, "FR": 6, "DE": 7, "RU": 8, "VI": 9} as const;
 
-const jaSymbols = [
-  "N", "a", "a:", "b", "by", "ch", "d", "dy", "e", "e:", "f", "g", "gy", "h", "hy", "i", "i:", "j", "k", "ky", "m", "my", "n", "ny", "o", "o:", "p", "py", "q", "r", "ry", "s", "sh", "t", "ts", "ty", "u", "u:", "w", "y", "z", "zy",
-];
-const numJaTones = 1;
-
-const enSymbols = [
-  "aa", "ae", "ah", "ao", "aw", "ay", "b", "ch", "d", "dh", "eh", "er", "ey", "f", "g", "hh", "ih", "iy", "jh", "k", "l", "m", "n", "ng", "ow", "oy", "p", "r", "s", "sh", "t", "th", "uh", "uw", "V", "w", "y", "z", "zh",
-];
-const numEnTones = 4;
-
-const krSymbols = ["ᄌ", "ᅥ", "ᆫ", "ᅦ", "ᄋ", "ᅵ", "ᄅ", "ᅴ", "ᄀ", "ᅡ", "ᄎ", "ᅪ", "ᄑ", "ᅩ", "ᄐ", "ᄃ", "ᅢ", "ᅮ", "ᆼ", "ᅳ", "ᄒ", "ᄆ", "ᆯ", "ᆷ", "ᄂ", "ᄇ", "ᄉ", "ᆮ", "ᄁ", "ᅬ", "ᅣ", "ᄄ", "ᆨ", "ᄍ", "ᅧ", "ᄏ", "ᆸ", "ᅭ", "(", "ᄊ", ")", "ᅲ", "ᅨ", "ᄈ", "ᅱ", "ᅯ", "ᅫ", "ᅰ", "ᅤ", "~", "\\", "[", "]", "/", "^", ":"];
-const numKrTones = 1;
-
-const esSymbols = [
-  "N", "Q", "a", "b", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "s", "t", "u", "v", "w", "x", "y", "z", "ɑ", "æ", "ʃ", "ʑ", "ç", "ɯ", "ɪ", "ɔ", "ɛ", "ɹ", "ð", "ə", "ɫ", "ɥ", "ɸ", "ʊ", "ɾ", "ʒ", "θ", "β", "ŋ", "ɦ", "ɡ", "r", "ɲ", "ʝ", "ɣ", "ʎ", "ˈ", "ˌ", "ː",
-];
-const numEsTones = 1;
-
-const frSymbols = ["\u0303", "œ", "ø", "ʁ", "ɒ", "ʌ", "ɜ", "ɐ"];
-const numFrTones = 1;
-
-const deSymbols = ["ʏ", "̩"];
-const numDeTones = 1;
-
-const ruSymbols = ["ɭ", "ʲ", "ɕ", "\"", "ɵ", "^", "ɬ"];
-const numRuTones = 1;
-
-const normalSymbols = Array.from(
-  new Set([
-    ...zhSymbols,
-    ...jaSymbols,
-    ...enSymbols,
-    ...krSymbols,
-    ...esSymbols,
-    ...frSymbols,
-    ...deSymbols,
-    ...ruSymbols,
-  ]),
-).sort();
-
-export const symbols = [PAD, ...normalSymbols, ...puSymbols];
-
-export const symbolToId = Object.fromEntries(symbols.map((symbol, index) => [symbol, index]));
-
-export const languageIdMap = {
-  ZH: 0,
-  JP: 1,
-  EN: 2,
-  ZH_MIX_EN: 3,
-  KR: 4,
-  ES: 5,
-  SP: 5,
-  FR: 6,
-  DE: 7,
-  RU: 8,
-  VI: 9,
-} as const;
-
-export const languageToneStartMap = {
-  ZH: 0,
-  ZH_MIX_EN: 0,
-  JP: numZhTones,
-  EN: numZhTones + numJaTones,
-  KR: numZhTones + numJaTones + numEnTones,
-  ES: numZhTones + numJaTones + numEnTones + numKrTones,
-  SP: numZhTones + numJaTones + numEnTones + numKrTones,
-  FR: numZhTones + numJaTones + numEnTones + numKrTones + numEsTones,
-  DE: numZhTones + numJaTones + numEnTones + numKrTones + numEsTones + numFrTones,
-  RU: numZhTones + numJaTones + numEnTones + numKrTones + numEsTones + numFrTones + numDeTones,
-  VI:
-    numZhTones +
-    numJaTones +
-    numEnTones +
-    numKrTones +
-    numEsTones +
-    numFrTones +
-    numDeTones +
-    numRuTones,
-} as const;
+export const languageToneStartMap = {"ZH": 0, "ZH_MIX_EN": 0, "JP": 6, "EN": 7, "KR": 11, "ES": 12, "SP": 12, "FR": 13, "DE": 14, "RU": 15, "VI": 16} as const;
 
 export type LanguageCode = keyof typeof languageToneStartMap;
 
-export const ARPA = new Set([
-  "AH0", "S", "AH1", "EY2", "AE2", "EH0", "OW2", "UH0", "NG", "B",
-  "G", "AY0", "M", "AA0", "F", "AO0", "ER2", "UH1", "IY1", "AH2",
-  "DH", "IY0", "EY1", "IH0", "K", "N", "W", "IY2", "T", "AA1",
-  "ER1", "EH2", "OY0", "UH2", "UW1", "Z", "AW2", "AW1", "V", "UW2",
-  "AA2", "ER", "AW0", "UW0", "R", "OW1", "EH1", "ZH", "AE0", "IH2",
-  "IH", "Y", "JH", "P", "AY1", "EY0", "OY2", "TH", "HH", "D",
-  "ER0", "CH", "AO1", "AE1", "AO2", "OY1", "AY2", "IH1", "OW0", "L", "SH",
-]);
+export const PAD = "_";
+
+export const ARPA = new Set(["AA0", "AA1", "AA2", "AE0", "AE1", "AE2", "AH0", "AH1", "AH2", "AO0", "AO1", "AO2", "AW0", "AW1", "AW2", "AY0", "AY1", "AY2", "B", "CH", "D", "DH", "EH0", "EH1", "EH2", "ER", "ER0", "ER1", "ER2", "EY0", "EY1", "EY2", "F", "G", "HH", "IH", "IH0", "IH1", "IH2", "IY0", "IY1", "IY2", "JH", "K", "L", "M", "N", "NG", "OW0", "OW1", "OW2", "OY0", "OY1", "OY2", "P", "R", "S", "SH", "T", "TH", "UH0", "UH1", "UH2", "UW0", "UW1", "UW2", "V", "W", "Y", "Z", "ZH"]);
