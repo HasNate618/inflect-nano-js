@@ -36,7 +36,11 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nate/inflect-nano-js"
+    "url": "git+https://github.com/HasNate618/inflect-nano-js.git"
+  },
+  "homepage": "https://github.com/HasNate618/inflect-nano-js#readme",
+  "bugs": {
+    "url": "https://github.com/HasNate618/inflect-nano-js/issues"
   },
   "dependencies": {
     "onnxruntime-web": "^1.27.0"

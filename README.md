@@ -112,7 +112,7 @@ Returns an `AsyncGenerator<{ text, audio }>` yielding one segment per completed 
 | `audio` | `Float32Array` PCM samples |
 | `duration` | Length in seconds |
 | `toBlob()` | WAV `Blob` |
-| `play()` | Play via `HTMLAudioElement` |
+| `play(element?)` | Play via `HTMLAudioElement` (pass your own element for lip-sync hooks) |
 | `save(filename)` | Trigger browser download |
 
 ### Low-level text API
@@ -151,11 +151,31 @@ Subsequent visits can use browser HTTP cache.
 
 ## Limitations
 
-- **Quality:** Experimental model — can sound robotic or unstable on unseen text
-- **Voice:** Single English male voice only
-- **Language:** English only
-- **Browser only:** Node.js support planned for a future release
-- **Prosody controls:** Not exposed in current ONNX export
+Per the [official model card](https://huggingface.co/owensong/Inflect-Nano-v1), Inflect-Nano-v1 is a **research/demo release**, not production TTS. Expect:
+
+- **Robotic or buzzy output**, especially on difficult or unseen text
+- **Unreliable long prompts** and unusual phrasing
+- **Vocoder bottleneck** — quality ceiling is inherent to the 4.6M stack
+- **Single English male voice** — no cloning or multilingual support
+
+### JavaScript-specific gaps (v0.1)
+
+| Official PyTorch path | inflect-nano-js v0.1 |
+|----------------------|----------------------|
+| `bert-base-uncased` WordPiece tokenization | Whitespace + apostrophe word split (close on most text, can diverge on compounds) |
+| `g2p_en` + full CMU dict | CMU dict + [tiny-tts](https://www.npmjs.com/package/tiny-tts) neural G2P port |
+| `length-scale` / `pitch-scale` / `energy-scale` | Not in [Luigi ONNX export](https://huggingface.co/Luigi/Inflect-Nano-v1-ONNX) inputs |
+
+Phoneme symbol IDs are generated from the exact `tiny_tts/text/symbols.py` table (`npm run generate-symbols`). Occasional weird pronunciation on rare words or LLM markdown is usually **G2P/tokenization drift** or **model limits**, not ONNX inference.
+
+**Tips for chat/assistant use:** keep utterances short (one sentence), strip markdown before `generate()`, and use `TextSplitterStream` for longer replies.
+
+### Roadmap
+
+- BERT WordPiece frontend parity with Python
+- WebGPU backend, Node.js entry point
+- Prosody controls when ONNX export supports them
+- Inflect-Nano-v2 when released
 
 ## Attribution
 

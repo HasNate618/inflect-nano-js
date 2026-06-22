@@ -1,5 +1,9 @@
 node_modules/
 dist/
 *.tgz
+.DS_Store
+scripts/compare-tokens.mjs
+scripts/debug-synth.*
+scripts/synth-test.mjs
 *.log
 .cache/
